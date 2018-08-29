@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public abstract class Back : MonoBehaviour {
-    protected GameObject ObjPopup;
-
     public abstract string PopSceneName { get; }
     public abstract void PushSceneName(string SceneName);
     public abstract void EscapeScene();
@@ -14,6 +12,7 @@ public abstract class Back : MonoBehaviour {
 public class AbstractBackScene : Back
 {
     public static Stack<string> SceneStack = new Stack<string>();
+    public static Stack<GameObject> PopupStack = new Stack<GameObject>();
 
     public override string PopSceneName
     {
@@ -26,22 +25,22 @@ public class AbstractBackScene : Back
     }
 
     public override void EscapeScene()
-    {
-        string EscapeSceneName = SceneStack.Pop();
-        if (EscapeSceneName != "Popup")
-        {
-            SceneManager.LoadScene(EscapeSceneName);
+    {               
+        if (PopupStack.Count == 0)
+        {            
+            string EscapeSceneName = SceneStack.Pop();
+            SceneManager.LoadScene(EscapeSceneName);            
         }
         else
-        {
-            DestroyImmediate(ObjPopup);
+        {            
+            DestroyImmediate(PopupStack.Pop());
         }        
     }
 
     public void Update(){
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (SceneStack.Count != 0)
+            if (SceneStack.Count != 0 || PopupStack.Count != 0)
             {
                 EscapeScene();
             }

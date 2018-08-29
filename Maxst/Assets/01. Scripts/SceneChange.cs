@@ -6,15 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneChange : AbstractBackScene
 {   
-    public void NextScene(string SceneName) {
-        PushSceneName(Application.loadedLevelName);
+    public void NextScene(string SceneName) {        
         if (SceneName != "Popup")
-        {            
+        {
+            PushSceneName(Application.loadedLevelName);
             SceneManager.LoadScene(SceneName);
         }
         else
-        {            
-            ObjPopup = Instantiate(Resources.Load<GameObject>("Popup"), GameObject.Find("Canvas").transform);            
+        {
+            PopupStack.Push(Instantiate(Resources.Load<GameObject>("Popup"), GameObject.Find("Canvas").transform));            
         }        
         //Test Git
     }
